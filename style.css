@@ -1,0 +1,260 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f6f3;
+    color: #1f2933;
+}
+
+.topo {
+    background: #ffffff;
+    padding: 18px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.logo {
+    font-size: 28px;
+    font-weight: bold;
+    color: #006b3f;
+}
+
+.menu {
+    display: flex;
+    gap: 22px;
+}
+
+.menu a {
+    text-decoration: none;
+    color: #1f2933;
+    font-weight: bold;
+}
+
+.menu a:hover {
+    color: #006b3f;
+}
+
+.banner {
+    min-height: 420px;
+    background: linear-gradient(120deg, #006b3f, #00a859);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 50px 7%;
+    gap: 40px;
+}
+
+.texto-banner {
+    max-width: 560px;
+    color: white;
+}
+
+.texto-banner h1 {
+    font-size: 44px;
+    margin-bottom: 18px;
+}
+
+.texto-banner p {
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+.card-busca {
+    background: white;
+    width: 360px;
+    padding: 25px;
+    border-radius: 18px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+}
+
+.card-busca h2 {
+    color: #006b3f;
+    margin-bottom: 18px;
+}
+
+.botao {
+    display: block;
+    text-decoration: none;
+    text-align: center;
+    background: #006b3f;
+    color: white;
+    padding: 13px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.botao:hover {
+    background: #005232;
+}
+
+.destaque {
+    background: #f2c300;
+    color: #1f2933;
+}
+
+.destaque:hover {
+    background: #d9ad00;
+}
+
+.cards {
+    padding: 40px 7%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+}
+
+.card {
+    background: white;
+    padding: 22px;
+    border-radius: 14px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+.card h3 {
+    color: #006b3f;
+    margin-bottom: 10px;
+}
+
+footer {
+    background: #003d25;
+    color: white;
+    text-align: center;
+    padding: 18px;
+    margin-top: 30px;
+}
+
+/* ESTILO PARA AS PÁGINAS PHP */
+
+h1 {
+    color: #006b3f;
+    margin: 25px 7% 15px;
+}
+
+h2 {
+    color: #003d25;
+    margin: 25px 7% 15px;
+}
+
+a {
+    color: #006b3f;
+    font-weight: bold;
+}
+
+form {
+    margin: 20px 7%;
+    background: white;
+    padding: 22px;
+    border-radius: 14px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+input,
+select {
+    padding: 11px;
+    border: 1px solid #cbd5d1;
+    border-radius: 7px;
+    font-size: 15px;
+}
+
+button {
+    background: #006b3f;
+    color: white;
+    border: none;
+    padding: 11px 18px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    background: #005232;
+}
+
+table {
+    width: 86%;
+    margin: 20px 7%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+th {
+    background: #006b3f;
+    color: white;
+    padding: 12px;
+}
+
+td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+}
+
+tr:hover {
+    background: #f1f8f4;
+}
+
+@media (max-width: 900px) {
+    .banner {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    .topo {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .menu {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .card-busca {
+        width: 100%;
+    }
+}
+
+.voltar {
+    margin-left: 7%;
+    margin-bottom: 15px;
+}
+
+.editar {
+    color: white;
+    background: #1976d2;
+    padding: 8px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    margin-right: 5px;
+}
+
+.editar:hover {
+    background: #0d47a1;
+}
+
+.excluir {
+    color: white;
+    background: #c62828;
+    padding: 8px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.excluir:hover {
+    background: #8e0000;
+}
