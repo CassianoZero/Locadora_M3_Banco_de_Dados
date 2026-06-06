@@ -3,11 +3,10 @@ include "conexao.php";
 
 $id_editar = "";
 $placa_editar = "";
-$modelo_editar = "";
-$marca_editar = "";
 $ano_editar = "";
-$categoria_editar = "";
-$status_editar = "";
+$id_modelo_editar = "";
+$id_categoria_editar = "";
+$id_status_editar = "";
 
 if (isset($_GET["editar"])) {
     $id = $_GET["editar"];
@@ -18,33 +17,30 @@ if (isset($_GET["editar"])) {
 
     $id_editar = $veiculo_editar["id_veiculo"];
     $placa_editar = $veiculo_editar["placa"];
-    $modelo_editar = $veiculo_editar["modelo"];
-    $marca_editar = $veiculo_editar["marca"];
     $ano_editar = $veiculo_editar["ano"];
-    $categoria_editar = $veiculo_editar["categoria"];
-    $status_editar = $veiculo_editar["status"];
+    $id_modelo_editar = $veiculo_editar["id_modelo"];
+    $id_categoria_editar = $veiculo_editar["id_categoria"];
+    $id_status_editar = $veiculo_editar["id_status"];
 }
 
 if (isset($_POST["salvar"])) {
     $id_veiculo = $_POST["id_veiculo"];
     $placa = $_POST["placa"];
-    $modelo = $_POST["modelo"];
-    $marca = $_POST["marca"];
     $ano = $_POST["ano"];
-    $categoria = $_POST["categoria"];
-    $status = $_POST["status"];
+    $id_modelo = $_POST["id_modelo"];
+    $id_categoria = $_POST["id_categoria"];
+    $id_status = $_POST["id_status"];
 
     if ($id_veiculo == "") {
-        $sql = "INSERT INTO veiculo (placa, modelo, marca, ano, categoria, status)
-                VALUES ('$placa', '$modelo', '$marca', '$ano', '$categoria', '$status')";
+        $sql = "INSERT INTO veiculo (placa, ano, id_modelo, id_categoria, id_status)
+                VALUES ('$placa', '$ano', '$id_modelo', '$id_categoria', '$id_status')";
     } else {
-        $sql = "UPDATE veiculo 
+        $sql = "UPDATE veiculo
                 SET placa = '$placa',
-                    modelo = '$modelo',
-                    marca = '$marca',
                     ano = '$ano',
-                    categoria = '$categoria',
-                    status = '$status'
+                    id_modelo = '$id_modelo',
+                    id_categoria = '$id_categoria',
+                    id_status = '$id_status'
                 WHERE id_veiculo = $id_veiculo";
     }
 
@@ -74,7 +70,24 @@ if (isset($_GET["excluir"])) {
     exit;
 }
 
-$resultado = $conexao->query("SELECT * FROM veiculo");
+$modelos = $conexao->query("
+    SELECT modelo.id_modelo, modelo.nome_modelo, marca.nome_marca
+    FROM modelo
+    JOIN marca ON modelo.id_marca = marca.id_marca
+");
+
+$categorias = $conexao->query("SELECT * FROM categoria");
+$status = $conexao->query("SELECT * FROM status_veiculo");
+
+$resultado = $conexao->query("
+    SELECT veiculo.*, modelo.nome_modelo, marca.nome_marca,
+           categoria.nome_categoria, status_veiculo.descricao_status
+    FROM veiculo
+    JOIN modelo ON veiculo.id_modelo = modelo.id_modelo
+    JOIN marca ON modelo.id_marca = marca.id_marca
+    JOIN categoria ON veiculo.id_categoria = categoria.id_categoria
+    JOIN status_veiculo ON veiculo.id_status = status_veiculo.id_status
+");
 ?>
 
 <!DOCTYPE html>
@@ -96,16 +109,36 @@ $resultado = $conexao->query("SELECT * FROM veiculo");
     <input type="hidden" name="id_veiculo" value="<?php echo $id_editar; ?>">
 
     <input type="text" name="placa" placeholder="Placa" required value="<?php echo $placa_editar; ?>">
-    <input type="text" name="modelo" placeholder="Modelo" required value="<?php echo $modelo_editar; ?>">
-    <input type="text" name="marca" placeholder="Marca" required value="<?php echo $marca_editar; ?>">
     <input type="number" name="ano" placeholder="Ano" value="<?php echo $ano_editar; ?>">
-    <input type="text" name="categoria" placeholder="Categoria" value="<?php echo $categoria_editar; ?>">
 
-    <select name="status">
-        <option value="Disponível" <?php if($status_editar == "Disponível") echo "selected"; ?>>Disponível</option>
-        <option value="Reservado" <?php if($status_editar == "Reservado") echo "selected"; ?>>Reservado</option>
-        <option value="Alugado" <?php if($status_editar == "Alugado") echo "selected"; ?>>Alugado</option>
-        <option value="Manutenção" <?php if($status_editar == "Manutenção") echo "selected"; ?>>Manutenção</option>
+    <select name="id_modelo" required>
+        <option value="">Selecione o modelo</option>
+        <?php while ($modelo = $modelos->fetch_assoc()) { ?>
+            <option value="<?php echo $modelo['id_modelo']; ?>"
+                <?php if ($modelo['id_modelo'] == $id_modelo_editar) echo "selected"; ?>>
+                <?php echo $modelo['nome_modelo'] . " - " . $modelo['nome_marca']; ?>
+            </option>
+        <?php } ?>
+    </select>
+
+    <select name="id_categoria" required>
+        <option value="">Selecione a categoria</option>
+        <?php while ($categoria = $categorias->fetch_assoc()) { ?>
+            <option value="<?php echo $categoria['id_categoria']; ?>"
+                <?php if ($categoria['id_categoria'] == $id_categoria_editar) echo "selected"; ?>>
+                <?php echo $categoria['nome_categoria']; ?>
+            </option>
+        <?php } ?>
+    </select>
+
+    <select name="id_status" required>
+        <option value="">Selecione o status</option>
+        <?php while ($st = $status->fetch_assoc()) { ?>
+            <option value="<?php echo $st['id_status']; ?>"
+                <?php if ($st['id_status'] == $id_status_editar) echo "selected"; ?>>
+                <?php echo $st['descricao_status']; ?>
+            </option>
+        <?php } ?>
     </select>
 
     <button type="submit" name="salvar">
@@ -131,11 +164,11 @@ $resultado = $conexao->query("SELECT * FROM veiculo");
     <tr>
         <td><?php echo $veiculo["id_veiculo"]; ?></td>
         <td><?php echo $veiculo["placa"]; ?></td>
-        <td><?php echo $veiculo["modelo"]; ?></td>
-        <td><?php echo $veiculo["marca"]; ?></td>
+        <td><?php echo $veiculo["nome_modelo"]; ?></td>
+        <td><?php echo $veiculo["nome_marca"]; ?></td>
         <td><?php echo $veiculo["ano"]; ?></td>
-        <td><?php echo $veiculo["categoria"]; ?></td>
-        <td><?php echo $veiculo["status"]; ?></td>
+        <td><?php echo $veiculo["nome_categoria"]; ?></td>
+        <td><?php echo $veiculo["descricao_status"]; ?></td>
         <td>
             <a class="editar" href="veiculo.php?editar=<?php echo $veiculo['id_veiculo']; ?>">Editar</a>
             <a class="excluir" href="veiculo.php?excluir=<?php echo $veiculo['id_veiculo']; ?>">Excluir</a>
