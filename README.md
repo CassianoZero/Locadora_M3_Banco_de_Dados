@@ -28,7 +28,7 @@ Projeto desenvolvido para a disciplina de Banco de Dados.
 C:\xampp\htdocs\Locadora_M3_Xampp
 ```
 
-4. Importar o arquivo banco.sql no phpMyAdmin.
+4. Importar o arquivo Trabalho_M3.sql no phpMyAdmin.
 
 5. Acessar:
 
