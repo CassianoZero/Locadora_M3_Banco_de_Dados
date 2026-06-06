@@ -32,12 +32,12 @@ if (isset($_POST["salvar"])) {
     $id_veiculo = $_POST["id_veiculo"];
 
     if ($id_reserva == "") {
-        $sql = "INSERT INTO reserva 
+        $sql = "INSERT INTO reserva
                 (data_reserva, data_retirada, data_devolucao, id_cliente, id_veiculo)
-                VALUES 
+                VALUES
                 ('$data_reserva', '$data_retirada', '$data_devolucao', '$id_cliente', '$id_veiculo')";
     } else {
-        $sql = "UPDATE reserva 
+        $sql = "UPDATE reserva
                 SET data_reserva = '$data_reserva',
                     data_retirada = '$data_retirada',
                     data_devolucao = '$data_devolucao',
@@ -61,13 +61,21 @@ if (isset($_GET["excluir"])) {
 }
 
 $clientes = $conexao->query("SELECT * FROM cliente");
-$veiculos = $conexao->query("SELECT * FROM veiculo");
+
+$veiculos = $conexao->query("
+    SELECT veiculo.id_veiculo, veiculo.placa, modelo.nome_modelo, marca.nome_marca
+    FROM veiculo
+    JOIN modelo ON veiculo.id_modelo = modelo.id_modelo
+    JOIN marca ON modelo.id_marca = marca.id_marca
+");
 
 $resultado = $conexao->query("
-    SELECT reserva.*, cliente.nome, veiculo.modelo, veiculo.placa
+    SELECT reserva.*, cliente.nome, veiculo.placa, modelo.nome_modelo, marca.nome_marca
     FROM reserva
     JOIN cliente ON reserva.id_cliente = cliente.id_cliente
     JOIN veiculo ON reserva.id_veiculo = veiculo.id_veiculo
+    JOIN modelo ON veiculo.id_modelo = modelo.id_modelo
+    JOIN marca ON modelo.id_marca = marca.id_marca
 ");
 ?>
 
@@ -91,6 +99,7 @@ $resultado = $conexao->query("
 
     <label>Cliente:</label>
     <select name="id_cliente" required>
+        <option value="">Selecione o cliente</option>
         <?php while ($cliente = $clientes->fetch_assoc()) { ?>
             <option value="<?php echo $cliente['id_cliente']; ?>"
                 <?php if ($cliente['id_cliente'] == $id_cliente_editar) echo "selected"; ?>>
@@ -101,10 +110,11 @@ $resultado = $conexao->query("
 
     <label>Veículo:</label>
     <select name="id_veiculo" required>
+        <option value="">Selecione o veículo</option>
         <?php while ($veiculo = $veiculos->fetch_assoc()) { ?>
             <option value="<?php echo $veiculo['id_veiculo']; ?>"
                 <?php if ($veiculo['id_veiculo'] == $id_veiculo_editar) echo "selected"; ?>>
-                <?php echo $veiculo['modelo'] . " - " . $veiculo['placa']; ?>
+                <?php echo $veiculo['nome_modelo'] . " - " . $veiculo['nome_marca'] . " - " . $veiculo['placa']; ?>
             </option>
         <?php } ?>
     </select>
@@ -140,7 +150,7 @@ $resultado = $conexao->query("
     <tr>
         <td><?php echo $reserva["id_reserva"]; ?></td>
         <td><?php echo $reserva["nome"]; ?></td>
-        <td><?php echo $reserva["modelo"] . " - " . $reserva["placa"]; ?></td>
+        <td><?php echo $reserva["nome_modelo"] . " - " . $reserva["nome_marca"] . " - " . $reserva["placa"]; ?></td>
         <td><?php echo $reserva["data_reserva"]; ?></td>
         <td><?php echo $reserva["data_retirada"]; ?></td>
         <td><?php echo $reserva["data_devolucao"]; ?></td>
