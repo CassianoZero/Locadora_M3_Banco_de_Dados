@@ -86,7 +86,19 @@ $resultado = $conexao->query("
     <title>Locações</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+
+<header class="topo">
+    <div class="logo">Locadora M3</div>
+
+    <nav class="menu">
+        <a href="cliente.php">Clientes</a>
+        <a href="veiculo.php">Veículos</a>
+        <a href="reserva.php">Reservas</a>
+        <a href="locacao.php">Locações</a>
+    </nav>
+</header>
 
 <h1>Cadastro de Locações</h1>
 
@@ -160,6 +172,10 @@ $resultado = $conexao->query("
     </tr>
     <?php } ?>
 </table>
+
+<footer>
+    <p>Trabalho M3 - Banco de Dados - Tema: Aluguel de Carros</p>
+</footer>
 
 </body>
 </html>
